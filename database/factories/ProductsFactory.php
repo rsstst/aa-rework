@@ -21,6 +21,7 @@ class ProductsFactory extends Factory
             'name' => fake()->word(),
             'description' => fake()->sentence(),
             'price' => fake()->randomFloat(0, 15000, 30000000),
+            'category' => fake()->randomElement(['cat1', 'cat2', 'cat3']),
         ];
     }
 }

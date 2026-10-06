@@ -1,6 +1,4 @@
-@vite('resources/css/app.css')
-
-<div class="flex flex-row gap-4 p-4 bg-[#2b3035] justify-between">
+<div class="sticky top-0 z-10 w-full flex flex-row gap-4 p-4 bg-[#2b3035] justify-between">
     <div class="flex flex-row gap-4 ">
         <img class="h-12" src="https://placehold.co/800x600" alt="">
         <img class="h-12" src="https://placehold.co/800x600" alt="">

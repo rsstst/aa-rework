@@ -20,7 +20,7 @@
             </span>
         </div>
 
-        <p class="line-clamp-2 text-sm leading-6 text-slate-500">{{ $product->description }}</p>
+        
 
         <a href="{{ route('product.show', $product) }}" class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/30">
             Lihat produk

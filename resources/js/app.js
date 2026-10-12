@@ -1,34 +1,3 @@
-const categoryToggle = document.querySelector('[data-category-toggle]');
-const categoryMenu = document.querySelector('[data-category-menu]');
-
-if (categoryToggle && categoryMenu) {
-    const setCategoryMenu = (isOpen) => {
-        categoryToggle.setAttribute('aria-expanded', String(isOpen));
-        categoryToggle.classList.toggle('bg-slate-100', isOpen);
-        categoryMenu.classList.toggle('invisible', !isOpen);
-        categoryMenu.classList.toggle('translate-y-2', !isOpen);
-        categoryMenu.classList.toggle('opacity-0', !isOpen);
-        categoryMenu.classList.toggle('visible', isOpen);
-        categoryMenu.classList.toggle('translate-y-0', isOpen);
-        categoryMenu.classList.toggle('opacity-100', isOpen);
-    };
-
-    categoryToggle.addEventListener('click', () => {
-        setCategoryMenu(categoryToggle.getAttribute('aria-expanded') !== 'true');
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!categoryToggle.contains(event.target) && !categoryMenu.contains(event.target)) {
-            setCategoryMenu(false);
-        }
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            setCategoryMenu(false);
-        }
-    });
-}
 
 const searchInput = document.querySelector('#site-search');
 const searchClear = document.querySelector('[data-search-clear]');
@@ -71,17 +40,16 @@ if (siteHeader && tagline) {
     const updateHeaderOnScroll = () => {
         const isScrolled = window.scrollY > 12;
 
-        siteHeader.classList.toggle('bg-white/80', isScrolled);
+        siteHeader.classList.toggle('bg-white/70', isScrolled);
         siteHeader.classList.toggle('backdrop-blur-xl', isScrolled);
         siteHeader.classList.toggle('shadow-[0_8px_30px_rgba(15,23,42,0.08)]', isScrolled);
-        siteHeader.classList.toggle('border-primary/25', isScrolled);
-        siteHeader.classList.toggle('bg-white/60', !isScrolled);
-        siteHeader.classList.toggle('backdrop-blur-md', !isScrolled);
+        siteHeader.classList.toggle('border-white/40', isScrolled);
+        siteHeader.classList.toggle('bg-white/95', !isScrolled);
         siteHeader.classList.toggle('shadow-[0_6px_24px_rgba(15,23,42,0.06)]', !isScrolled);
         siteHeader.classList.toggle('border-slate-200/80', !isScrolled);
 
         tagline.classList.toggle('max-h-0', isScrolled);
-        tagline.classList.toggle('!py-0', isScrolled);
+        tagline.classList.toggle('py-0', isScrolled);
         tagline.classList.toggle('opacity-0', isScrolled);
         tagline.classList.toggle('max-h-12', !isScrolled);
         tagline.classList.toggle('opacity-100', !isScrolled);

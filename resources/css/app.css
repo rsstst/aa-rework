@@ -4,19 +4,12 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
+    /* Ubah nilai ini untuk mengganti warna utama seluruh UI. */
+    --color-primary: #1b2a59;
+    --color-primary-foreground: #ffffff;
+
     --font-sans:
         "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
-}
-
-@layer {
-    /* body{
-        background-image: url("https://placehold.co/800x600");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        min-height: 100vh;
-    } */
 }

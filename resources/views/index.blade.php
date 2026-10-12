@@ -1,25 +1,48 @@
 @extends('components.layout')
+
 @section('content')
-    <main class="overflow-hidden">
-        <div class="w-full h-screen flex flex-col items-center mt-32 gap-4">
-            <div class="flex flex-row gap-4">
-                <img class="w-32 rounded-xl" src="https://placehold.co/800x600/red/white?text=lorem" alt="">
-                <img class="w-32 rounded-xl" src="https://placehold.co/800x600/red/white?text=ipsum" alt="">
-            </div>
-            <h1 class="text-5xl font-bold text-center">Belanja Atap Online</h1>
-            <p>This is some kind of catchphrase. lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <div class="flex flex-row gap-4 items-center text-center justify-center">
-                <a class="transition duration-300 text-white bg-blue-500 hover:bg-blue-700 w-32 py-2.5 flex items-center justify-center text-xl rounded-xl"
-                    href={{ route('catalog') }}>Katalog</a>
-                <a class="transition duration-300 text-white bg-blue-500 hover:bg-blue-700 w-32 py-2.5 flex items-center justify-center text-xl rounded-xl"
-                    href={{ route('order') }}>Order</a>
-            </div>
-            <span class="border-b-2 border-blue-500 w-2xl"></span>
-            <div class="flex flex-row gap-12 text-gray-500">
-                <p class="w-1/3">Maybe some kind of benefit?</p>
-                <p class="w-1/3">Gratis ongkir(daerah tertentu)</p>
-                <p class="w-1/3">garansi 2 jam</p>
-            </div>
+    <main class="bg-slate-50">
+        {{-- 1. Hero / Promosi Utama FULL WIDTH (Di luar container max-w-7xl) --}}
+        <section aria-label="Promosi utama" class="w-full">
+            <img
+                class="h-auto max-h-[400px] min-h-[220px] w-full object-cover shadow-sm"
+                src="https://placehold.co/1200x400"
+                alt="Banner promosi toko material"
+            >
+        </section>
+
+        {{-- 2. Konten Utama (Memakai container agar rapi di tengah) --}}
+        <div class="mx-auto flex max-w-7xl flex-col gap-14 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+            <section aria-labelledby="category-heading">
+                <div class="mb-6 flex items-end justify-between gap-4">
+                    <div>
+                        {{-- Judul diubah agar lebih rapi dan jelas --}}
+                        <h1 id="category-heading" class="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                            Kategori Produk
+                        </h1>
+                        <p class="mt-2 text-sm text-slate-500">Pilih kategori untuk mulai mencari kebutuhan proyek Anda.</p>
+                    </div>
+                    <a
+                        class="shrink-0 text-sm font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition hover:text-primary/80"
+                        href="{{ route('catalog') }}"
+                    >
+                        Lihat semua
+                    </a>
+                </div>
+
+                @if ($categories->isNotEmpty())
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        @foreach ($categories as $category)
+                            <x-category-card :category="$category" />
+                        @endforeach
+                    </div>
+                @else
+                    <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
+                        <p class="font-semibold text-slate-900">Kategori belum tersedia.</p>
+                        <p class="mt-2 text-sm text-slate-500">Silakan kembali lagi setelah produk ditambahkan.</p>
+                    </div>
+                @endif
+            </section>
         </div>
     </main>
 @endsection

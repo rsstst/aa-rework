@@ -5,8 +5,8 @@
         {{-- 1. Hero / Promosi Utama FULL WIDTH (Di luar container max-w-7xl) --}}
         <section aria-label="Promosi utama" class="w-full">
             <img
-                class="h-auto max-h-[400px] min-h-[220px] w-full object-cover shadow-sm"
-                src="https://placehold.co/1200x400"
+                class="h-auto max-h-100 min-h-55 w-full object-cover shadow-sm"
+                src="https://placehold.co/1200x400/blue/white?text=Hero+Toko+Material"
                 alt="Banner promosi toko material"
             >
         </section>

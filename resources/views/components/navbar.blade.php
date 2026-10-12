@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-7xl px-4 lg:px-8">
         <div class="flex min-h-14 items-center gap-2.5 sm:gap-3">
             <a class="group flex h-9 w-28 shrink-0 items-center overflow-hidden rounded-lg sm:w-32" href="{{ route('home') }}" aria-label="Beranda">
-                <img class="h-full w-full object-cover transition duration-300 group-hover:scale-105" src="https://placehold.co/800x600" alt="Logo toko material">
+                <img class="h-full w-full object-cover transition duration-300 group-hover:scale-105" src="https://placehold.co/800x600/red/white?text=Placeholder+Logo" alt="Logo toko material">
             </a>
 
             

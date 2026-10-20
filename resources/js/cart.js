@@ -1,61 +1,67 @@
-const cartStorageKey = 'aa-rework-cart';
-
 const currencyFormatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
     maximumFractionDigits: 0,
 });
 
-export function getCart() {
-    try {
-        const storedCart = JSON.parse(localStorage.getItem(cartStorageKey) || '[]');
+async function cartRequest(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            ...options.headers,
+        },
+        ...options,
+    });
 
-        return Array.isArray(storedCart) ? storedCart : [];
+    if (!response.ok) {
+        throw new Error(`Cart request failed with status ${response.status}.`);
+    }
+
+    return response.json();
+}
+
+export async function getCart() {
+    try {
+        const response = await cartRequest('/cart/items');
+
+        return Array.isArray(response.cart) ? response.cart : [];
     } catch (error) {
-        console.error('Keranjang tidak dapat dibaca dari penyimpanan lokal.', error);
+        console.error('Keranjang tidak dapat dibaca dari server.', error);
 
         return [];
     }
 }
 
-function saveCart(cart) {
-    localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+function updateCartCount(cart) {
+    const count = cart.reduce((total, item) => total + Number(item.quantity), 0);
+
+    document.querySelectorAll('[data-cart-count]').forEach((badge) => {
+        badge.textContent = count;
+        badge.classList.toggle('hidden', count === 0);
+    });
 }
 
-export function addProduct(product) {
-    const cart = getCart();
-    const existingProduct = cart.find((item) => String(item.id) === String(product.id));
-
-    if (existingProduct) {
-        existingProduct.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-
-    saveCart(cart);
+export async function addProduct(productId) {
+    await cartRequest('/cart', {
+        method: 'POST',
+        body: JSON.stringify({ product_id: productId }),
+    });
 }
 
-export function removeProduct(productId) {
-    saveCart(getCart().filter((item) => String(item.id) !== String(productId)));
+export async function removeProduct(productId) {
+    await cartRequest(`/cart/${encodeURIComponent(productId)}`, {
+        method: 'DELETE',
+    });
 }
 
-function updateProductQuantity(productId, change) {
-    const cart = getCart();
-    const product = cart.find((item) => String(item.id) === String(productId));
-
-    if (!product) {
-        return;
-    }
-
-    product.quantity += change;
-
-    if (product.quantity <= 0) {
-        removeProduct(productId);
-
-        return;
-    }
-
-    saveCart(cart);
+async function updateProductQuantity(productId, change) {
+    await cartRequest(`/cart/${encodeURIComponent(productId)}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ change }),
+    });
 }
 
 function escapeHtml(value) {
@@ -67,7 +73,10 @@ function escapeHtml(value) {
         .replaceAll("'", '&#039;');
 }
 
-export function renderCart() {
+export async function renderCart() {
+    const cart = await getCart();
+    updateCartCount(cart);
+
     const orderCart = document.querySelector('[data-order-cart]');
     const orderEmpty = document.querySelector('[data-order-empty]');
     const orderSummary = document.querySelector('[data-order-summary]');
@@ -77,7 +86,6 @@ export function renderCart() {
         return;
     }
 
-    const cart = getCart();
     const total = cart.reduce((sum, item) => sum + (Number(item.price) * Number(item.quantity)), 0);
 
     orderCart.innerHTML = cart.map((product) => `
@@ -122,27 +130,58 @@ export function renderCart() {
 }
 
 const orderProductLink = document.querySelector('[data-order-product-id]');
+const cartAddedModal = document.querySelector('[data-cart-added-modal]');
+const cartAddedClose = document.querySelector('[data-cart-added-close]');
+
+function closeCartAddedModal() {
+    if (!cartAddedModal) {
+        return;
+    }
+
+    cartAddedModal.classList.add('hidden');
+    cartAddedModal.classList.remove('flex');
+    cartAddedModal.setAttribute('aria-hidden', 'true');
+}
+
+function openCartAddedModal() {
+    if (!cartAddedModal) {
+        return;
+    }
+
+    cartAddedModal.classList.remove('hidden');
+    cartAddedModal.classList.add('flex');
+    cartAddedModal.setAttribute('aria-hidden', 'false');
+    cartAddedClose?.focus();
+}
 
 if (orderProductLink) {
-    orderProductLink.addEventListener('click', (event) => {
+    orderProductLink.addEventListener('click', async (event) => {
         event.preventDefault();
 
-        addProduct({
-            id: orderProductLink.dataset.orderProductId,
-            name: orderProductLink.dataset.orderProductName,
-            price: orderProductLink.dataset.orderProductPrice,
-            slug: orderProductLink.dataset.orderProductSlug,
-            category: orderProductLink.dataset.orderProductCategory,
-        });
-
-        window.location.href = orderProductLink.href;
+        await addProduct(orderProductLink.dataset.orderProductId);
+        await renderCart();
+        openCartAddedModal();
     });
 }
+
+cartAddedClose?.addEventListener('click', closeCartAddedModal);
+
+cartAddedModal?.addEventListener('click', (event) => {
+    if (event.target === cartAddedModal) {
+        closeCartAddedModal();
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeCartAddedModal();
+    }
+});
 
 const orderCart = document.querySelector('[data-order-cart]');
 
 if (orderCart) {
-    orderCart.addEventListener('click', (event) => {
+    orderCart.addEventListener('click', async (event) => {
         const actionButton = event.target.closest('[data-cart-action]');
 
         if (!actionButton) {
@@ -153,13 +192,14 @@ if (orderCart) {
         const action = actionButton.dataset.cartAction;
 
         if (action === 'remove') {
-            removeProduct(productId);
+            await removeProduct(productId);
         } else {
-            updateProductQuantity(productId, action === 'increase' ? 1 : -1);
+            await updateProductQuantity(productId, action === 'increase' ? 1 : -1);
         }
 
-        renderCart();
+        await renderCart();
     });
 
-    renderCart();
 }
+
+renderCart();

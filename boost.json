@@ -1,12 +1,15 @@
 {
     "agents": [
-        "claude_code",
-        "zed"
+        "copilot",
+        "copilot-cli"
     ],
     "cloud": true,
     "guidelines": true,
     "mcp": true,
     "nightwatch": false,
+    "packages": [
+        "revolution/laravel-boost-copilot-cli"
+    ],
     "sail": false,
     "skills": [
         "infer-conventions",

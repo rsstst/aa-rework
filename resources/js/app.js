@@ -1,5 +1,3 @@
-import './cart';
-
 const searchInput = document.querySelector('#site-search');
 const searchClear = document.querySelector('[data-search-clear]');
 

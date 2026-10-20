@@ -27,15 +27,14 @@
                         {{ \Illuminate\Support\Number::currency($product->price, in: 'IDR', locale: 'id') }}
                     </p>
                     <p class="mt-5 max-w-prose text-base leading-7 text-slate-600">{{ $product->description }}</p>
-                    <a href="{{ route('order') }}"
-                        data-order-product-id="{{ $product->id }}"
-                        data-order-product-name="{{ $product->name }}"
-                        data-order-product-price="{{ $product->price }}"
-                        data-order-product-slug="{{ $product->slug }}"
-                        data-order-product-category="{{ $product->category }}"
+                    <form action="{{ route('cart.store') }}" method="POST" class="mt-8">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit"
                         class="mt-8 inline-flex w-fit rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/30">
-                        Pesan produk
-                    </a>
+                            Pesan produk
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

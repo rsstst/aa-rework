@@ -1,3 +1,7 @@
+@php
+    $cartCount = collect(session('cart', []))->sum();
+@endphp
+
 <header
     class="sticky top-0 z-50 border-b border-primary/20 bg-white/60 shadow-[0_6px_24px_rgba(15,23,42,0.06)] backdrop-blur-md transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300"
     data-site-header>
@@ -37,7 +41,11 @@
             </form>
             <a class="hidden h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-primary focus:outline-none focus:ring-4 focus:ring-primary/20 sm:inline-flex"
                 href="{{ route('order') }}" aria-label="Buka cart">
-                <i class="fa-solid fa-cart-shopping text-base" aria-hidden="true"></i>
+                <span class="relative">
+                    <i class="fa-solid fa-cart-shopping text-base" aria-hidden="true"></i>
+                    <span @class(['absolute -right-3 -top-3 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                        aria-hidden="true">{{ $cartCount }}</span>
+                </span>
                 <span>Cart</span>
             </a>
 
@@ -65,7 +73,11 @@
                 </a>
                 <a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
                     href="{{ route('order') }}">
-                    <i class="fa-solid fa-cart-shopping w-5 text-center" aria-hidden="true"></i>
+                    <span class="relative w-5 text-center">
+                        <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+                        <span @class(['absolute -right-1 -top-2 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                            aria-hidden="true">{{ $cartCount }}</span>
+                    </span>
                     <span>Cart</span>
                 </a>
             </div>

@@ -7,7 +7,7 @@
     <div class="aspect-[4/3] overflow-hidden">
         <img
             class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-            src="https://placehold.co/800x600?text={{ urlencode(\Illuminate\Support\Str::headline($category)) }}"
+            src="https://placehold.co/800x600}"
             alt="Kategori {{ \Illuminate\Support\Str::headline($category) }}"
         >
     </div>

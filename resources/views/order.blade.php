@@ -31,6 +31,11 @@
                         <span class="text-sm text-slate-500">Total</span>
                         <span data-order-total class="text-lg font-bold text-slate-950">Rp0</span>
                     </div>
+                    <button type="button" data-whatsapp-order data-whatsapp-number="6281200000000"
+                        disabled
+                        class="mt-5 inline-flex rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
+                        Order Sekarang
+                    </button>
                 </aside>
             </div>
         </div>

@@ -44,6 +44,26 @@ function updateCartCount(cart) {
     });
 }
 
+function formatWhatsAppCurrency(value) {
+    return `Rp. ${new Intl.NumberFormat('id-ID', {
+        maximumFractionDigits: 0,
+    }).format(value)}`;
+}
+
+function createWhatsAppUrl(cart, phoneNumber) {
+    const lines = [
+        'Halo, kak. Saya mau pesan produk dibawah ini;',
+        ...cart.map((item) => {
+            const subtotal = Number(item.price) * Number(item.quantity);
+
+            return `- ${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''} ( ${formatWhatsAppCurrency(subtotal)} )`;
+        }),
+        `-- Total ${formatWhatsAppCurrency(cart.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0))}`,
+    ];
+
+    return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
+}
+
 export async function addProduct(productId) {
     await cartRequest('/cart', {
         method: 'POST',
@@ -81,6 +101,7 @@ export async function renderCart() {
     const orderEmpty = document.querySelector('[data-order-empty]');
     const orderSummary = document.querySelector('[data-order-summary]');
     const orderTotal = document.querySelector('[data-order-total]');
+    const whatsappOrder = document.querySelector('[data-whatsapp-order]');
 
     if (!orderCart || !orderEmpty || !orderSummary || !orderTotal) {
         return;
@@ -127,6 +148,7 @@ export async function renderCart() {
     orderEmpty.classList.toggle('hidden', cart.length > 0);
     orderSummary.classList.toggle('hidden', cart.length === 0);
     orderTotal.textContent = currencyFormatter.format(total);
+    whatsappOrder?.toggleAttribute('disabled', cart.length === 0);
 }
 
 const orderProductLink = document.querySelector('[data-order-product-id]');
@@ -179,6 +201,18 @@ document.addEventListener('keydown', (event) => {
 });
 
 const orderCart = document.querySelector('[data-order-cart]');
+const whatsappOrder = document.querySelector('[data-whatsapp-order]');
+
+whatsappOrder?.addEventListener('click', async () => {
+    const cart = await getCart();
+    const phoneNumber = whatsappOrder.dataset.whatsappNumber;
+
+    if (cart.length === 0 || !phoneNumber) {
+        return;
+    }
+
+    window.open(createWhatsAppUrl(cart, phoneNumber), '_blank', 'noopener,noreferrer');
+});
 
 if (orderCart) {
     orderCart.addEventListener('click', async (event) => {

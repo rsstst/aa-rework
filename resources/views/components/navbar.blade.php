@@ -1,3 +1,7 @@
+@php
+    $cartCount = collect(session('cart', []))->sum();
+@endphp
+
 <header
     class="sticky top-0 z-50 border-b border-primary/20 bg-white/60 shadow-[0_6px_24px_rgba(15,23,42,0.06)] backdrop-blur-md transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300"
     data-site-header>
@@ -39,8 +43,8 @@
                 href="{{ route('order') }}" aria-label="Buka cart">
                 <span class="relative">
                     <i class="fa-solid fa-cart-shopping text-base" aria-hidden="true"></i>
-                    <span class="absolute -right-3 -top-3 hidden min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white"
-                        data-cart-count aria-hidden="true"></span>
+                    <span @class(['absolute -right-3 -top-3 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                        aria-hidden="true">{{ $cartCount }}</span>
                 </span>
                 <span>Cart</span>
             </a>
@@ -71,8 +75,8 @@
                     href="{{ route('order') }}">
                     <span class="relative w-5 text-center">
                         <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
-                        <span class="absolute -right-1 -top-2 hidden min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white"
-                            data-cart-count aria-hidden="true"></span>
+                        <span @class(['absolute -right-1 -top-2 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                            aria-hidden="true">{{ $cartCount }}</span>
                     </span>
                     <span>Cart</span>
                 </a>

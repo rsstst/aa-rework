@@ -15,8 +15,7 @@
             <div
                 class="mt-8 grid gap-8 rounded-2xl bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.08)] lg:grid-cols-2 lg:p-8">
                 <div class="overflow-hidden rounded-xl">
-                    <img class="aspect-[4/3] h-full w-full object-cover"
-                        src="https://placehold.co/800x600">
+                    <img class="aspect-4/3 h-full w-full object-cover" src="https://placehold.co/800x600?text={{ urlencode($product->name) }}" alt="{{ $product->name }}">
                 </div>
                 <div class="flex flex-col justify-center">
                     <p class="text-xs font-semibold uppercase tracking-[0.14em] text-primary">

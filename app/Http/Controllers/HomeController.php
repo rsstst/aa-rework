@@ -9,15 +9,11 @@ class HomeController
 {
     public function index(): View
     {
-        $categories = Products::query()
-            ->whereNotNull('category')
-            ->where('category', '!=', '')
-            ->select('category')
-            ->distinct()
-            ->orderBy('category')
+        $products = Products::query()
+            ->latest()
             ->limit(9)
-            ->pluck('category');
+            ->get();
 
-        return view('index', compact('categories'));
+        return view('index', compact('products'));
     }
 }

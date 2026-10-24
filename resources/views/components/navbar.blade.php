@@ -42,6 +42,7 @@
                 <span class="relative">
                     <i class="fa-solid fa-cart-shopping text-base" aria-hidden="true"></i>
                     <span @class(['absolute -right-3 -top-3 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                        data-cart-count
                         aria-hidden="true">{{ $cartCount }}</span>
                 </span>
                 <span>Cart</span>
@@ -74,6 +75,7 @@
                     <span class="relative w-5 text-center">
                         <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
                         <span @class(['absolute -right-1 -top-2 min-w-4 rounded-full bg-red-600 px-1 text-center text-[10px] font-bold leading-4 text-white', 'hidden' => $cartCount === 0])
+                            data-cart-count
                             aria-hidden="true">{{ $cartCount }}</span>
                     </span>
                     <span>Cart</span>

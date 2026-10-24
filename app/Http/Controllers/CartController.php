@@ -4,47 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Models\Products;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CartController
 {
     public function index(): View
     {
-        $cart = $this->cartItems();
-
-        return view('order', [
-            'cart' => $cart,
-            'total' => collect($cart)->sum(
-                fn (array $item): int|float => $item['price'] * $item['quantity']
-            ),
-        ]);
+        return view('order');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function items(): JsonResponse
+    {
+        return response()->json($this->cartPayload());
+    }
+
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'product_id' => ['required', 'integer', 'exists:product,id'],
         ]);
 
-        $cart = session('cart', []);
+        $cart = session()->get('cart', []);
         $productId = (string) $validated['product_id'];
         $cart[$productId] = ($cart[$productId] ?? 0) + 1;
 
-        session(['cart' => $cart]);
+        session()->put('cart', $cart);
 
-        return redirect()
-            ->route('order')
-            ->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+        return response()->json($this->cartPayload());
     }
 
-    public function update(Request $request, Products $product): RedirectResponse
+    public function update(Request $request, Products $product): JsonResponse
     {
         $validated = $request->validate([
             'change' => ['required', 'integer', 'in:-1,1'],
         ]);
 
-        $cart = session('cart', []);
+        $cart = session()->get('cart', []);
         $productId = (string) $product->getKey();
         $quantity = ($cart[$productId] ?? 0) + $validated['change'];
 
@@ -54,32 +50,27 @@ class CartController
             $cart[$productId] = $quantity;
         }
 
-        session(['cart' => $cart]);
+        session()->put('cart', $cart);
 
-        return redirect()->route('order');
+        return response()->json($this->cartPayload());
     }
 
-    public function destroy(Products $product): RedirectResponse
+    public function destroy(Products $product): JsonResponse
     {
-        $cart = session('cart', []);
+        $cart = session()->get('cart', []);
         unset($cart[(string) $product->getKey()]);
 
-        session(['cart' => $cart]);
+        session()->put('cart', $cart);
 
-        return redirect()->route('order');
+        return response()->json($this->cartPayload());
     }
 
     /**
-     * @return array<int, array{id: int, name: string, price: int|float, slug: string, category: string|null, quantity: int}>
+     * @return array{cart: array<int, array{id: int, name: string, price: int|float, slug: string, category: string|null, quantity: int}>, total: int|float}
      */
-    private function cartItems(): array
+    private function cartPayload(): array
     {
-        $storedCart = session('cart', []);
-
-        if ($storedCart === []) {
-            return [];
-        }
-
+        $storedCart = session()->get('cart', []);
         $products = Products::query()
             ->whereIn('id', array_keys($storedCart))
             ->get()
@@ -104,6 +95,11 @@ class CartController
             ];
         }
 
-        return $cart;
+        return [
+            'cart' => $cart,
+            'total' => collect($cart)->sum(
+                fn (array $item): int|float => $item['price'] * $item['quantity']
+            ),
+        ];
     }
 }

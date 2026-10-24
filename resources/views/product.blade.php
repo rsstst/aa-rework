@@ -26,16 +26,30 @@
                         {{ \Illuminate\Support\Number::currency($product->price, in: 'IDR', locale: 'id') }}
                     </p>
                     <p class="mt-5 max-w-prose text-base leading-7 text-slate-600">{{ $product->description }}</p>
-                    <form action="{{ route('cart.store') }}" method="POST" class="mt-8">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit"
+                    <button type="button"
+                        data-order-product-id="{{ $product->id }}"
                         class="mt-8 inline-flex w-fit rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/30">
-                            Pesan produk
-                        </button>
-                    </form>
+                        Tambah ke keranjang
+                    </button>
                 </div>
             </div>
         </div>
     </main>
+
+    <div class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/45 px-4 backdrop-blur-sm"
+        data-cart-added-modal aria-hidden="true">
+        <div class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-[0_20px_60px_rgba(15,23,42,0.2)]"
+            role="dialog" aria-modal="true" aria-labelledby="cart-added-title" data-cart-added-dialog>
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                <i class="fa-solid fa-check text-xl" aria-hidden="true"></i>
+            </div>
+            <h2 id="cart-added-title" class="mt-4 text-xl font-bold text-slate-950">Ditambahkan ke keranjang</h2>
+            <p class="mt-2 text-sm text-slate-500">Produk berhasil ditambahkan ke keranjang Anda.</p>
+            <button type="button"
+                class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/30"
+                data-cart-added-close>
+                Tutup
+            </button>
+        </div>
+    </div>
 @endsection

@@ -158,4 +158,11 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/pest` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 - After the feature tests pass, ask the user to run the complete suite with `php artisan test --compact`.
 
+=== revolution/laravel-boost-copilot-cli/core rules ===
+
+## Laravel Boost for GitHub Copilot CLI
+
+This project uses Laravel Boost to provide MCP (Model Context Protocol) tools for GitHub Copilot CLI.
+The MCP server is configured in `.github/mcp.json` and automatically loaded by Copilot CLI.
+
 </laravel-boost-guidelines>

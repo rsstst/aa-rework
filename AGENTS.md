@@ -3,11 +3,9 @@
 
 # Laravel Boost Guidelines
 
-The Laravel Boost guidelines are specifically curated by Laravel maintainers for this application. These guidelines should be followed closely to ensure the best experience when building Laravel applications.
-
 ## Foundational Context
 
-This application is a Laravel application running on PHP 8.5. You are an expert with the Laravel ecosystem. Always use the APIs that match the installed major version of each package — do not assume a version.
+This application is a Laravel application running on PHP 8.4. Always use the APIs that match the installed major version of each package — do not assume a version.
 
 Before relying on a package's API, confirm its installed version:
 - PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.
@@ -34,15 +32,11 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 ## Frontend Bundling
 
-- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
+- If a frontend change doesn't show in the UI or you get a "Unable to locate file in Vite manifest" error, run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
 
 ## Documentation Files
 
 - You must only create documentation files if explicitly requested by the user.
-
-## Replies
-
-- Be concise in your explanations - focus on what's important rather than explaining obvious details.
 
 === boost rules ===
 
@@ -72,8 +66,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 ## Project Rules
 
-- This project contains committed, area-grouped rules in `.ai/rules` when that directory exists (settled decisions, non-obvious traps, standing constraints). Framework and package guidelines that only apply to specific paths (testing, frontend, components) also live there, under `.ai/rules/boost` — this is not just recorded decisions, it is load-bearing guidance you have not seen inline. Before you enter plan mode or create/edit any file, you MUST first: open @.ai/rules/index.md (it maps file globs to rule files), read every rule file whose globs cover the path(s) in scope, and run `grep -rin 'keyword' .ai/rules` to catch what a path match alone misses. Do not write code until you have read and are following every matching rule. If `.ai/rules` does not exist, continue without it.
-- Record a rule with `record-rule` only when the user explicitly asks for one. Instructions for the work at hand are not rules, no matter how emphatic: "remove this typo", "use X here" are work to do, not rules to record. Never record a rule on your own initiative, as a byproduct of a change, or to summarize what you just did. When the user does ask, pass a `glob` (e.g. `app/Http/Controllers/**`), a short `title`, and a few-line `note`. Use `record-rule` rather than your native memory or notes tool, because native memory is personal and session-scoped, while only `.ai/rules` is shared with the team and persists in the repo.
+- This project contains committed, area-grouped rules in `.ai/rules` when that directory exists, including path-scoped framework guidelines under `.ai/rules/boost`. Before you enter plan mode or create/edit any file, you MUST first: open @.ai/rules/index.md (it maps file globs to rule files), read every rule file whose globs cover the path(s) in scope, and run `grep -rin 'keyword' .ai/rules` to catch what a path match alone misses. Do not write code until you have read and are following every matching rule. If `.ai/rules` does not exist, continue without it.
 
 ## Artisan
 
@@ -103,7 +96,6 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 # Deployment
 
 - Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
-- Activate the `deploying-to-cloud` skill whenever deploying to Laravel Cloud, configuring Cloud environments or resources, using the Cloud CLI, or troubleshooting Cloud deployments.
 
 === laravel/core rules ===
 
@@ -130,10 +122,6 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
 - Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
 - When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
-
-## Vite Error
-
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
 
 === pint/core rules ===
 
@@ -166,3 +154,62 @@ This project uses Laravel Boost to provide MCP (Model Context Protocol) tools fo
 The MCP server is configured in `.github/mcp.json` and automatically loaded by Copilot CLI.
 
 </laravel-boost-guidelines>
+
+# Project Specifications
+
+## Project identity
+
+This repository is a Laravel 13 storefront prototype for roofing and building materials, with a Blade/Vite/Tailwind front end. The application is currently focused on product discovery and order-flow UX rather than full backend integration.
+
+- Primary audience: Indonesian homeowners, builders, and property operators.
+- Current working name: "Belanja Atap Online" (provisional only; not a confirmed final brand commitment).
+- Product purpose: help visitors evaluate roofing products quickly, browse a useful catalog, filter products by category and price, and move toward an order.
+- Positioning: storefront for building materials, with the front-end layout and merchandising experience as the active focus.
+
+## Product scope and constraints
+
+- The project is a web storefront with routes for `home`, `catalog`, and `order`.
+- Current work prioritizes front-end layout, navigation, merchandising hierarchy, and ordering flow.
+- Product records may use dummy data while the UX is being designed.
+- The prototype already includes catalog filtering for category, minimum price, and maximum price.
+- Delivery, warranty, payment, service-area, and fulfillment behavior are not confirmed; avoid making unverified claims in the interface.
+- Preserve the current Laravel/Blade structure where practical, but do not block UI work on backend implementation.
+- Do not invent a durable commercial differentiator, brand promise, or logistics claim that is not approved.
+
+## Product content standards
+
+- Use Indonesian customer-facing language intentionally and consistently where copy is shown.
+- Keep placeholder English and incomplete copy from becoming final product claims.
+- Use neutral placeholder content when product, logistics, warranty, or payment details are uncertain.
+- Favor clarity and usefulness over backend realism when the prototype is still exploring layout and flow.
+
+## Key implementation files
+
+- `resources/views/index.blade.php` — storefront landing page and entry points.
+- `resources/views/catalog.blade.php` — catalog display and filtering UI.
+- `app/Http/Controllers/CatalogController.php` — category and price filtering logic.
+- `database/migrations/2026_09_21_143215_create_product_table.php` — product schema prototype.
+- `database/seeders/ProductSeeder.php` — seed data for prototype products.
+
+## Product principles
+
+1. Help visitors evaluate roofing products quickly and confidently.
+2. Keep the front-end useful even while data and backend behavior are provisional.
+3. Make the path from discovery to ordering obvious.
+4. Use Indonesian language intentionally and consistently.
+5. Never imply unconfirmed logistics, warranty, payment, or service promises.
+
+## Accessibility and quality bar
+
+- Maintain accessible web fundamentals: meaningful alt text, keyboard access, readable contrast, clear labels, and responsive layouts.
+- Favor a useful storefront experience over fake product completeness.
+- Keep the UX understandable and conversion-friendly while product data and backend behavior evolve.
+
+## Technical stack
+
+- Laravel 13
+- Blade templates
+- Vite frontend build
+- Tailwind CSS 4
+- Pest for tests
+- Composer-managed PHP dependencies

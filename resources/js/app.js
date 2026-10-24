@@ -5,7 +5,7 @@ const searchClear = document.querySelector('[data-search-clear]');
 
 if (searchInput && searchClear) {
     const updateSearchClear = () => {
-        searchClear.dataset.visible = String(searchInput.value.length > 0);
+        searchClear.dataset.visible = String(searchInput.value.trim().length > 0);
     };
 
     searchInput.addEventListener('input', updateSearchClear);
@@ -13,8 +13,46 @@ if (searchInput && searchClear) {
         searchInput.value = '';
         updateSearchClear();
         searchInput.focus();
+        searchInput.form?.dispatchEvent(new Event('submit', { cancelable: true }));
     });
     updateSearchClear();
+
+    let searchTimer = null;
+    const submitSearch = () => {
+        if (!searchInput.form) {
+            return;
+        }
+
+        if (searchTimer) {
+            window.clearTimeout(searchTimer);
+        }
+
+        searchTimer = window.setTimeout(() => {
+            if (searchInput.value.trim().length >= 2 || searchInput.value.trim().length === 0) {
+                searchInput.form.submit();
+            }
+        }, 200);
+    };
+
+    searchInput.addEventListener('input', () => {
+        if (searchTimer) {
+            window.clearTimeout(searchTimer);
+        }
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            if (searchTimer) {
+                window.clearTimeout(searchTimer);
+            }
+
+            if (!searchInput.form) {
+                return;
+            }
+
+            searchInput.form.submit();
+        }
+    });
 }
 
 const mobileToggle = document.querySelector('[data-mobile-toggle]');

@@ -12,6 +12,15 @@ class CatalogController
     {
         $query = Products::query();
 
+        if ($request->filled('q')) {
+            $search = trim($request->q);
+
+            $query->where(function ($searchQuery) use ($search) {
+                $searchQuery->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($search).'%'])
+                    ->orWhereRaw('LOWER(category) LIKE ?', ['%'.mb_strtolower($search).'%']);
+            });
+        }
+
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }

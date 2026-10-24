@@ -166,3 +166,62 @@ This project uses Laravel Boost to provide MCP (Model Context Protocol) tools fo
 The MCP server is configured in `.github/mcp.json` and automatically loaded by Copilot CLI.
 
 </laravel-boost-guidelines>
+
+# Project Specifications
+
+## Project identity
+
+This repository is a Laravel 13 storefront prototype for roofing and building materials, with a Blade/Vite/Tailwind front end. The application is currently focused on product discovery and order-flow UX rather than full backend integration.
+
+- Primary audience: Indonesian homeowners, builders, and property operators.
+- Current working name: "Belanja Atap Online" (provisional only; not a confirmed final brand commitment).
+- Product purpose: help visitors evaluate roofing products quickly, browse a useful catalog, filter products by category and price, and move toward an order.
+- Positioning: storefront for building materials, with the front-end layout and merchandising experience as the active focus.
+
+## Product scope and constraints
+
+- The project is a web storefront with routes for `home`, `catalog`, and `order`.
+- Current work prioritizes front-end layout, navigation, merchandising hierarchy, and ordering flow.
+- Product records may use dummy data while the UX is being designed.
+- The prototype already includes catalog filtering for category, minimum price, and maximum price.
+- Delivery, warranty, payment, service-area, and fulfillment behavior are not confirmed; avoid making unverified claims in the interface.
+- Preserve the current Laravel/Blade structure where practical, but do not block UI work on backend implementation.
+- Do not invent a durable commercial differentiator, brand promise, or logistics claim that is not approved.
+
+## Product content standards
+
+- Use Indonesian customer-facing language intentionally and consistently where copy is shown.
+- Keep placeholder English and incomplete copy from becoming final product claims.
+- Use neutral placeholder content when product, logistics, warranty, or payment details are uncertain.
+- Favor clarity and usefulness over backend realism when the prototype is still exploring layout and flow.
+
+## Key implementation files
+
+- `resources/views/index.blade.php` — storefront landing page and entry points.
+- `resources/views/catalog.blade.php` — catalog display and filtering UI.
+- `app/Http/Controllers/CatalogController.php` — category and price filtering logic.
+- `database/migrations/2026_09_21_143215_create_product_table.php` — product schema prototype.
+- `database/seeders/ProductSeeder.php` — seed data for prototype products.
+
+## Product principles
+
+1. Help visitors evaluate roofing products quickly and confidently.
+2. Keep the front-end useful even while data and backend behavior are provisional.
+3. Make the path from discovery to ordering obvious.
+4. Use Indonesian language intentionally and consistently.
+5. Never imply unconfirmed logistics, warranty, payment, or service promises.
+
+## Accessibility and quality bar
+
+- Maintain accessible web fundamentals: meaningful alt text, keyboard access, readable contrast, clear labels, and responsive layouts.
+- Favor a useful storefront experience over fake product completeness.
+- Keep the UX understandable and conversion-friendly while product data and backend behavior evolve.
+
+## Technical stack
+
+- Laravel 13
+- Blade templates
+- Vite frontend build
+- Tailwind CSS 4
+- Pest for tests
+- Composer-managed PHP dependencies

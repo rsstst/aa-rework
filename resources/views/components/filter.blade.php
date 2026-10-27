@@ -22,11 +22,19 @@
             <label class="grid gap-1.5" for="min_price">
                 <span class="text-xs font-medium text-slate-500">Minimum</span>
                 <span class="relative">
-                    <input type="text" id="min_price" inputmode="numeric" autocomplete="off" placeholder="0" value="{{ request()->filled('min_price') ? request('min_price') : '' }}" data-price-input="min" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="text" id="min_price" inputmode="numeric" autocomplete="off" placeholder="Rp 0,00" value="{{ request()->filled('min_price') ? 'Rp '.request('min_price').',00' : '' }}" data-price-input="min" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
                     <input type="hidden" name="min_price" value="{{ request('min_price') }}" data-price-value="min">
-                    <span class="absolute inset-y-0 right-1 grid w-7 grid-rows-2 py-1">
-                        <button type="button" aria-label="Tambah harga minimum" data-price-step="min" data-price-direction="up" class="text-xs leading-none text-slate-500 hover:text-primary">▲</button>
-                        <button type="button" aria-label="Kurangi harga minimum" data-price-step="min" data-price-direction="down" class="text-xs leading-none text-slate-500 hover:text-primary">▼</button>
+                    <span class="absolute inset-y-1 right-1 grid w-7 grid-rows-2 overflow-hidden rounded-lg border-l border-slate-200 bg-white/70">
+                        <button type="button" aria-label="Tambah harga minimum" data-price-step="min" data-price-direction="up" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 7 3-3 3 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                        <button type="button" aria-label="Kurangi harga minimum" data-price-step="min" data-price-direction="down" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 5 3 3 3-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
                     </span>
                 </span>
             </label>
@@ -34,11 +42,19 @@
             <label class="grid gap-1.5" for="max_price">
                 <span class="text-xs font-medium text-slate-500">Maksimum</span>
                 <span class="relative">
-                    <input type="text" id="max_price" inputmode="numeric" autocomplete="off" placeholder="0" value="{{ request()->filled('max_price') ? request('max_price') : '' }}" data-price-input="max" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="text" id="max_price" inputmode="numeric" autocomplete="off" placeholder="Rp 0,00" value="{{ request()->filled('max_price') ? 'Rp '.request('max_price').',00' : '' }}" data-price-input="max" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
                     <input type="hidden" name="max_price" value="{{ request('max_price') }}" data-price-value="max">
-                    <span class="absolute inset-y-0 right-1 grid w-7 grid-rows-2 py-1">
-                        <button type="button" aria-label="Tambah harga maksimum" data-price-step="max" data-price-direction="up" class="text-xs leading-none text-slate-500 hover:text-primary">▲</button>
-                        <button type="button" aria-label="Kurangi harga maksimum" data-price-step="max" data-price-direction="down" class="text-xs leading-none text-slate-500 hover:text-primary">▼</button>
+                    <span class="absolute inset-y-1 right-1 grid w-7 grid-rows-2 overflow-hidden rounded-lg border-l border-slate-200 bg-white/70">
+                        <button type="button" aria-label="Tambah harga maksimum" data-price-step="max" data-price-direction="up" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 7 3-3 3 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                        <button type="button" aria-label="Kurangi harga maksimum" data-price-step="max" data-price-direction="down" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 5 3 3 3-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
                     </span>
                 </span>
             </label>

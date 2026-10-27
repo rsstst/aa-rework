@@ -16,11 +16,28 @@
         </select>
     </div>
 
-    <div class="grid gap-2">
+    <div class="grid gap-3" data-price-filter>
         <span class="text-sm font-semibold text-slate-700">Rentang harga</span>
-        <div class="grid grid-cols-2 gap-2">
-            <input type="number" name="min_price" id="min_price" placeholder="Minimum" value="{{ request('min_price') }}" class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
-            <input type="number" name="max_price" id="max_price" placeholder="Maksimum" value="{{ request('max_price') }}" class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+        <div class="grid gap-4">
+            <label class="grid gap-1.5" for="min_price">
+                <span class="text-xs font-medium text-slate-500">Minimum</span>
+                <input type="number" name="min_price" id="min_price" min="0" max="5000000" step="1" placeholder="Minimum" value="{{ request('min_price') }}" data-price-input="min" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+            </label>
+
+            <label class="grid gap-1.5" for="max_price">
+                <span class="text-xs font-medium text-slate-500">Maksimum</span>
+                <input type="number" name="max_price" id="max_price" min="0" max="5000000" step="1" placeholder="Maksimum" value="{{ request('max_price') }}" data-price-input="max" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+            </label>
+
+            <div class="grid gap-2">
+                <span class="text-xs font-medium text-slate-500">Atur rentang harga</span>
+                <div class="relative h-6" data-price-sliders>
+                    <div class="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-200"></div>
+                    <div class="pointer-events-none absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary" data-price-range-fill></div>
+                    <input type="range" min="0" max="2000000" step="5000" value="{{ request('min_price', 0) }}" aria-label="Atur harga minimum" data-price-slider="min" class="absolute inset-0 z-10 m-0 h-6 w-full appearance-none pointer-events-none bg-transparent accent-primary [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto">
+                    <input type="range" min="0" max="2000000" step="5000" value="{{ request()->filled('max_price') ? request('max_price') : 2000000 }}" aria-label="Atur harga maksimum" data-price-slider="max" class="absolute inset-0 z-20 m-0 h-6 w-full appearance-none pointer-events-none bg-transparent accent-primary [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto">
+                </div>
+            </div>
         </div>
     </div>
 

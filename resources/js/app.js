@@ -97,3 +97,129 @@ if (siteHeader && tagline) {
     window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
     updateHeaderOnScroll();
 }
+
+const priceFilter = document.querySelector('[data-price-filter]');
+
+if (priceFilter) {
+    const minInput = priceFilter.querySelector('[data-price-input="min"]');
+    const maxInput = priceFilter.querySelector('[data-price-input="max"]');
+    const minSlider = priceFilter.querySelector('[data-price-slider="min"]');
+    const maxSlider = priceFilter.querySelector('[data-price-slider="max"]');
+    const rangeFill = priceFilter.querySelector('[data-price-range-fill]');
+
+    if (minInput && maxInput && minSlider && maxSlider && rangeFill) {
+        const minimum = Number(minSlider.min);
+        const maximum = Number(minSlider.max);
+
+        const updateRange = () => {
+            const minValue = Math.min(Number(minSlider.value), Number(maxSlider.value));
+            const maxValue = Math.max(Number(maxSlider.value), minValue);
+            const minPercentage = ((minValue - minimum) / (maximum - minimum)) * 100;
+            const maxPercentage = ((maxValue - minimum) / (maximum - minimum)) * 100;
+
+            rangeFill.style.cssText = `
+                left: ${minPercentage}%;
+                width: ${Math.max(maxPercentage - minPercentage, 0)}%;
+            `;
+        };
+
+        const syncSliderValue = (input, slider, fallback) => {
+            const rawValue = input.value.trim();
+
+            if (rawValue === '') {
+                slider.value = fallback;
+                return;
+            }
+
+            const value = Number(rawValue);
+
+            slider.value = Number.isFinite(value)
+                ? Math.min(Math.max(value, minimum), maximum)
+                : fallback;
+        };
+
+        const syncInputRange = (input, slider, otherSlider, otherInput, fallback) => {
+            syncSliderValue(input, slider, fallback);
+
+            if (Number(slider.value) > Number(otherSlider.value)) {
+                otherSlider.value = slider.value;
+                otherInput.value = slider.value;
+            }
+
+            updateRange();
+        };
+
+        const adjustInput = (input, direction) => {
+            const fallback = input === maxInput ? maximum : minimum;
+            const currentValue = Number(input.value);
+            const nextValue = Math.min(
+                Math.max((Number.isFinite(currentValue) ? currentValue : fallback) + direction * 5000, minimum),
+                maximum,
+            );
+
+            input.value = nextValue;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        minSlider.addEventListener('input', () => {
+            const nextMin = Math.min(Number(minSlider.value), Number(maxSlider.value));
+
+            minSlider.value = nextMin;
+            minInput.value = nextMin;
+            updateRange();
+        });
+
+        maxSlider.addEventListener('input', () => {
+            const nextMax = Math.max(Number(maxSlider.value), Number(minSlider.value));
+
+            maxSlider.value = nextMax;
+            maxInput.value = nextMax;
+            updateRange();
+        });
+
+        minInput.addEventListener('change', () => {
+            syncInputRange(minInput, minSlider, maxSlider, maxInput, minimum);
+        });
+
+        maxInput.addEventListener('change', () => {
+            syncSliderValue(maxInput, maxSlider, maximum);
+
+            if (Number(maxSlider.value) < Number(minSlider.value)) {
+                minSlider.value = maxSlider.value;
+                minInput.value = minSlider.value;
+            }
+
+            updateRange();
+        });
+
+        [minInput, maxInput].forEach((input) => {
+            input.addEventListener('pointerdown', (event) => {
+                const bounds = input.getBoundingClientRect();
+                const isSpinnerArea = event.clientX >= bounds.right - 24;
+
+                if (!isSpinnerArea) {
+                    return;
+                }
+
+                event.preventDefault();
+                input.focus();
+                const direction = event.clientY < bounds.top + bounds.height / 2 ? 1 : -1;
+                adjustInput(input, direction);
+            });
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+                    return;
+                }
+
+                event.preventDefault();
+                const direction = event.key === 'ArrowUp' ? 1 : -1;
+                adjustInput(input, direction);
+            });
+        });
+
+        syncSliderValue(minInput, minSlider, minimum);
+        syncSliderValue(maxInput, maxSlider, maximum);
+        updateRange();
+    }
+}

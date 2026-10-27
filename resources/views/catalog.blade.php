@@ -13,7 +13,7 @@
 
             <div class="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
                 <aside>
-                    @include('components.filter', ['categories' => $categories])
+                    @include('components.filter', ['categories' => $categories, 'maxPrice' => $maxPrice])
                 </aside>
 
                 <section aria-label="Daftar produk">

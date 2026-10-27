@@ -21,12 +21,26 @@
         <div class="grid gap-4">
             <label class="grid gap-1.5" for="min_price">
                 <span class="text-xs font-medium text-slate-500">Minimum</span>
-                <input type="number" name="min_price" id="min_price" min="0" max="5000000" step="1" placeholder="Minimum" value="{{ request('min_price') }}" data-price-input="min" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                <span class="relative">
+                    <input type="text" id="min_price" inputmode="numeric" autocomplete="off" placeholder="0" value="{{ request()->filled('min_price') ? request('min_price') : '' }}" data-price-input="min" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="hidden" name="min_price" value="{{ request('min_price') }}" data-price-value="min">
+                    <span class="absolute inset-y-0 right-1 grid w-7 grid-rows-2 py-1">
+                        <button type="button" aria-label="Tambah harga minimum" data-price-step="min" data-price-direction="up" class="text-xs leading-none text-slate-500 hover:text-primary">▲</button>
+                        <button type="button" aria-label="Kurangi harga minimum" data-price-step="min" data-price-direction="down" class="text-xs leading-none text-slate-500 hover:text-primary">▼</button>
+                    </span>
+                </span>
             </label>
 
             <label class="grid gap-1.5" for="max_price">
                 <span class="text-xs font-medium text-slate-500">Maksimum</span>
-                <input type="number" name="max_price" id="max_price" min="0" max="5000000" step="1" placeholder="Maksimum" value="{{ request('max_price') }}" data-price-input="max" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                <span class="relative">
+                    <input type="text" id="max_price" inputmode="numeric" autocomplete="off" placeholder="0" value="{{ request()->filled('max_price') ? request('max_price') : '' }}" data-price-input="max" data-price-min="0" data-price-max="2000000" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="hidden" name="max_price" value="{{ request('max_price') }}" data-price-value="max">
+                    <span class="absolute inset-y-0 right-1 grid w-7 grid-rows-2 py-1">
+                        <button type="button" aria-label="Tambah harga maksimum" data-price-step="max" data-price-direction="up" class="text-xs leading-none text-slate-500 hover:text-primary">▲</button>
+                        <button type="button" aria-label="Kurangi harga maksimum" data-price-step="max" data-price-direction="down" class="text-xs leading-none text-slate-500 hover:text-primary">▼</button>
+                    </span>
+                </span>
             </label>
 
             <div class="grid gap-2">

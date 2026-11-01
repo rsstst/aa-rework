@@ -65,11 +65,11 @@ class ProductSeeder extends Seeder
                 'slug' => 'pasir-pasang-1-m3',
             ],
             [
-                'name' => 'Pipa PVC AW 3/4 inci',
+                'name' => 'Pipa PVC Lesso 3/4 inci',
                 'category' => 'pipa',
                 'description' => 'Pipa PVC kelas AW sepanjang 4 meter untuk instalasi air bersih dan kebutuhan sanitasi.',
                 'price' => 28500,
-                'slug' => 'pipa-pvc-aw-3-4-inci',
+                'slug' => 'pipa-pvc-lesso-3-4-inci',
             ],
             [
                 'name' => 'Kayu Meranti 4 x 6 x 400 cm',
@@ -77,6 +77,48 @@ class ProductSeeder extends Seeder
                 'description' => 'Kayu meranti serbaguna untuk rangka plafon, kusen, bekisting, dan berbagai pekerjaan pertukangan.',
                 'price' => 85000,
                 'slug' => 'kayu-meranti-4-x-6-x-400-cm',
+            ],
+            [
+                'name' => 'Plywood 12 mm 122 x 244 cm',
+                'category' => 'plywood',
+                'description' => 'Plywood 12 mm dengan permukaan rata untuk bekisting, furnitur, dan kebutuhan interior bangunan.',
+                'price' => 185000,
+                'slug' => 'plywood-12-mm-122-x-244-cm',
+            ],
+            [
+                'name' => 'Besi Hollow Galvanis 4 x 4 cm',
+                'category' => 'besi hollow',
+                'description' => 'Besi hollow galvanis untuk rangka plafon, partisi, kanopi, dan konstruksi ringan.',
+                'price' => 78000,
+                'slug' => 'besi-hollow-galvanis-4-x-4-cm',
+            ],
+            [
+                'name' => 'Wiremesh M8 Lembar',
+                'category' => 'wiremesh',
+                'description' => 'Wiremesh M8 untuk tulangan pelat lantai, dak beton, dan pekerjaan struktur bangunan.',
+                'price' => 685000,
+                'slug' => 'wiremesh-m8-lembar',
+            ],
+            [
+                'name' => 'Papan Gypsum 9 mm',
+                'category' => 'gypsum',
+                'description' => 'Papan gypsum 9 mm untuk plafon dan partisi interior dengan hasil pemasangan yang rapi.',
+                'price' => 92000,
+                'slug' => 'papan-gypsum-9-mm',
+            ],
+            [
+                'name' => 'Baut Roofing  ga 2 inci',
+                'category' => 'baut',
+                'description' => 'Baut roofing dengan ring karet untuk pemasangan lembaran atap dan pekerjaan penutup bangunan.',
+                'price' => 35000,
+                'slug' => 'baut-roofing-2-inci',
+            ],
+            [
+                'name' => 'Mortar Instan Pasangan Bata 40 kg',
+                'category' => 'mortar',
+                'description' => 'Mortar instan untuk pemasangan bata ringan dengan campuran praktis dan mudah digunakan.',
+                'price' => 65000,
+                'slug' => 'mortar-instan-pasangan-bata-40-kg',
             ],
         ];
 

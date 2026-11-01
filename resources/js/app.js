@@ -112,7 +112,7 @@ if (priceFilter) {
     if (minInput && maxInput && minValueInput && maxValueInput && minSlider && maxSlider && rangeFill) {
         const minimum = Number(minSlider.min);
         const maximum = Number(maxSlider.max);
-        const formatPrice = (value) => value === '' ? '' : `Rp ${value},00`;
+    const formatPrice = (value) => value === '' ? '' : `Rp ${new Intl.NumberFormat('id-ID').format(Number(value))},00`;
         const readPrice = (input) => {
             const value = input.value
                 .replace(/^Rp\s*/i, '')

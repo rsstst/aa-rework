@@ -39,8 +39,9 @@ class CatalogController
             ->distinct()
             ->orderBy('category')
             ->pluck('category');
+        $maxPrice = (int) Products::max('price');
 
-        return view('catalog', compact('products', 'categories'));
+        return view('catalog', compact('products', 'categories', 'maxPrice'));
     }
 
     public function show(Products $product): View

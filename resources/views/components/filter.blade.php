@@ -16,11 +16,58 @@
         </select>
     </div>
 
-    <div class="grid gap-2">
+    <div class="grid gap-3" data-price-filter>
         <span class="text-sm font-semibold text-slate-700">Rentang harga</span>
-        <div class="grid grid-cols-2 gap-2">
-            <input type="number" name="min_price" id="min_price" placeholder="Minimum" value="{{ request('min_price') }}" class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
-            <input type="number" name="max_price" id="max_price" placeholder="Maksimum" value="{{ request('max_price') }}" class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+        <div class="grid gap-4">
+            <label class="grid gap-1.5" for="min_price">
+                <span class="text-xs font-medium text-slate-500">Minimum</span>
+                <span class="relative">
+                    <input type="text" id="min_price" inputmode="numeric" autocomplete="off" placeholder="Rp 0,00" value="{{ request()->filled('min_price') ? 'Rp '.request('min_price').',00' : '' }}" data-price-input="min" data-price-min="0" data-price-max="{{ $maxPrice }}" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="hidden" name="min_price" value="{{ request('min_price') }}" data-price-value="min">
+                    <span class="absolute inset-y-1 right-1 grid w-7 grid-rows-2 overflow-hidden rounded-lg border-l border-slate-200 bg-white/70">
+                        <button type="button" aria-label="Tambah harga minimum" data-price-step="min" data-price-direction="up" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 7 3-3 3 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                        <button type="button" aria-label="Kurangi harga minimum" data-price-step="min" data-price-direction="down" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 5 3 3 3-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                    </span>
+                </span>
+            </label>
+
+            <label class="grid gap-1.5" for="max_price">
+                <span class="text-xs font-medium text-slate-500">Maksimum</span>
+                <span class="relative">
+                    <input type="text" id="max_price" inputmode="numeric" autocomplete="off" placeholder="Rp 0,00" value="{{ request()->filled('max_price') ? 'Rp '.request('max_price').',00' : '' }}" data-price-input="max" data-price-min="0" data-price-max="{{ $maxPrice }}" class="min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pr-12 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
+                    <input type="hidden" name="max_price" value="{{ request('max_price') }}" data-price-value="max">
+                    <span class="absolute inset-y-1 right-1 grid w-7 grid-rows-2 overflow-hidden rounded-lg border-l border-slate-200 bg-white/70">
+                        <button type="button" aria-label="Tambah harga maksimum" data-price-step="max" data-price-direction="up" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 7 3-3 3 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                        <button type="button" aria-label="Kurangi harga maksimum" data-price-step="max" data-price-direction="down" class="grid place-items-center text-slate-400 transition hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary focus:outline-none">
+                            <svg aria-hidden="true" class="size-3" viewBox="0 0 12 12" fill="none">
+                                <path d="m3 5 3 3 3-3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                        </button>
+                    </span>
+                </span>
+            </label>
+
+            <div class="grid gap-2">
+                <span class="text-xs font-medium text-slate-500">Atur rentang harga</span>
+                <div class="relative h-6" data-price-sliders>
+                    <div class="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-200"></div>
+                    <div class="pointer-events-none absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary" data-price-range-fill></div>
+                    <input type="range" min="0" max="{{ $maxPrice }}" step="5000" value="{{ request('min_price', 0) }}" aria-label="Atur harga minimum" data-price-slider="min" class="absolute inset-0 z-10 m-0 h-6 w-full appearance-none pointer-events-none bg-transparent accent-primary [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto">
+                    <input type="range" min="0" max="{{ $maxPrice }}" step="5000" value="{{ request()->filled('max_price') ? request('max_price') : $maxPrice }}" aria-label="Atur harga maksimum" data-price-slider="max" class="absolute inset-0 z-20 m-0 h-6 w-full appearance-none pointer-events-none bg-transparent accent-primary [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto">
+                </div>
+            </div>
         </div>
     </div>
 

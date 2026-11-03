@@ -72,7 +72,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/pasir.webp',
             ],
             [
-                'name' => 'Pipa PVC AW 3/4 inci',
+                'name' => 'Pipa PVC Lesso 3/4 inci',
                 'category' => 'pipa',
                 'description' => 'Pipa PVC kelas AW sepanjang 4 meter untuk instalasi air bersih dan kebutuhan sanitasi.',
                 'price' => 28500,

@@ -97,3 +97,153 @@ if (siteHeader && tagline) {
     window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
     updateHeaderOnScroll();
 }
+
+const priceFilter = document.querySelector('[data-price-filter]');
+
+if (priceFilter) {
+    const minInput = priceFilter.querySelector('[data-price-input="min"]');
+    const maxInput = priceFilter.querySelector('[data-price-input="max"]');
+    const minValueInput = priceFilter.querySelector('[data-price-value="min"]');
+    const maxValueInput = priceFilter.querySelector('[data-price-value="max"]');
+    const minSlider = priceFilter.querySelector('[data-price-slider="min"]');
+    const maxSlider = priceFilter.querySelector('[data-price-slider="max"]');
+    const rangeFill = priceFilter.querySelector('[data-price-range-fill]');
+
+    if (minInput && maxInput && minValueInput && maxValueInput && minSlider && maxSlider && rangeFill) {
+        const minimum = Number(minSlider.min);
+        const maximum = Number(maxSlider.max);
+    const formatPrice = (value) => value === '' ? '' : `Rp ${new Intl.NumberFormat('id-ID').format(Number(value))},00`;
+        const readPrice = (input) => {
+            const value = input.value
+                .replace(/^Rp\s*/i, '')
+                .replace(/,00$/, '')
+                .replace(/[^\d]/g, '');
+
+            return Number(value) || 0;
+        };
+        const setPrice = (input, hiddenInput, value, formatted = true) => {
+            input.value = formatted ? formatPrice(value) : value;
+            hiddenInput.value = value;
+        };
+
+        const updateRange = () => {
+            const minValue = Math.min(Number(minSlider.value), Number(maxSlider.value));
+            const maxValue = Math.max(Number(maxSlider.value), minValue);
+            const minPercentage = ((minValue - minimum) / (maximum - minimum)) * 100;
+            const maxPercentage = ((maxValue - minimum) / (maximum - minimum)) * 100;
+
+            rangeFill.style.cssText = `
+                left: ${minPercentage}%;
+                width: ${Math.max(maxPercentage - minPercentage, 0)}%;
+            `;
+        };
+
+        const syncSliderValue = (input, slider, fallback) => {
+            if (input.value.trim() === '') {
+                slider.value = fallback;
+                hiddenInputFor(input).value = '';
+                return;
+            }
+
+            const value = Math.min(Math.max(readPrice(input), minimum), maximum);
+            slider.value = value;
+            setPrice(input, hiddenInputFor(input), value);
+        };
+
+        const hiddenInputFor = (input) => input === minInput ? minValueInput : maxValueInput;
+
+        const adjustInput = (input, direction) => {
+            const currentValue = readPrice(input);
+            const nextValue = Math.min(
+                Math.max(currentValue + direction * 5000, Number(input.dataset.priceMin)),
+                Number(input.dataset.priceMax),
+            );
+
+            setPrice(input, hiddenInputFor(input), nextValue);
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        const syncInputRange = (input, slider, otherSlider, otherInput, fallback) => {
+            syncSliderValue(input, slider, fallback);
+
+            if (Number(slider.value) > Number(otherSlider.value)) {
+                otherSlider.value = slider.value;
+                setPrice(otherInput, hiddenInputFor(otherInput), slider.value);
+            }
+
+            updateRange();
+        };
+
+        minSlider.addEventListener('input', () => {
+            const nextMin = Math.min(Number(minSlider.value), Number(maxSlider.value));
+
+            minSlider.value = nextMin;
+            setPrice(minInput, minValueInput, nextMin);
+            updateRange();
+        });
+
+        maxSlider.addEventListener('input', () => {
+            const nextMax = Math.max(Number(maxSlider.value), Number(minSlider.value));
+
+            maxSlider.value = nextMax;
+            setPrice(maxInput, maxValueInput, nextMax);
+            updateRange();
+        });
+
+        minInput.addEventListener('change', () => {
+            syncInputRange(minInput, minSlider, maxSlider, maxInput, minimum);
+        });
+
+        maxInput.addEventListener('change', () => {
+            syncSliderValue(maxInput, maxSlider, maximum);
+
+            if (Number(maxInput.value) < Number(minInput.value)) {
+                setPrice(minInput, minValueInput, readPrice(maxInput));
+                minSlider.value = maxSlider.value;
+            }
+
+            updateRange();
+        });
+
+        [minInput, maxInput].forEach((input) => {
+            input.addEventListener('focus', () => {
+                input.value = readPrice(input) || '';
+            });
+
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/[^\d]/g, '');
+            });
+
+            input.addEventListener('blur', () => {
+                setPrice(input, hiddenInputFor(input), readPrice(input));
+            });
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+                    return;
+                }
+
+                event.preventDefault();
+                adjustInput(input, event.key === 'ArrowUp' ? 1 : -1);
+            });
+        });
+
+        priceFilter.querySelectorAll('[data-price-step]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const input = button.dataset.priceStep === 'min' ? minInput : maxInput;
+                const direction = button.dataset.priceDirection === 'up' ? 1 : -1;
+
+                adjustInput(input, direction);
+            });
+        });
+
+        syncSliderValue(minInput, minSlider, minimum);
+        syncSliderValue(maxInput, maxSlider, maximum);
+        updateRange();
+
+        priceFilter.closest('form')?.addEventListener('submit', () => {
+            setPrice(minInput, minValueInput, readPrice(minInput));
+            setPrice(maxInput, maxValueInput, readPrice(maxInput));
+        });
+    }
+}
